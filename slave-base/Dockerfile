@@ -7,8 +7,8 @@ ENV HOME=/home/jenkins
 USER root
 # Install headless Java
 RUN yum install -y centos-release-scl-rh && \
-    x86_EXTRA_RPMS=$(if [ "$(uname -m)" == "x86_64" ]; then echo -n java-1.8.0-openjdk-headless.i686 ; fi) && \
-    INSTALL_PKGS="bc gettext git java-1.8.0-openjdk-headless lsof rsync tar unzip which zip bzip2" && \
+    x86_EXTRA_RPMS=$(if [ "$(uname -m)" == "x86_64" ]; then echo -n java-11-openjdk-headless.i686 ; fi) && \
+    INSTALL_PKGS="bc gettext git java-11-openjdk-headless lsof rsync tar unzip which zip bzip2" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS $x86_EXTRA_RPMS && \
     # have temporarily removed the validation for java to work around known problem fixed in fedora; jupierce and gmontero are working with
     # the requisit folks to get that addressed ... will switch back to rpm -V $INSTALL_PKGS when that occurs
@@ -28,25 +28,25 @@ RUN yum install -y centos-release-scl-rh && \
     unlink /usr/bin/java && \
     unlink /usr/bin/jjs && \
     unlink /usr/bin/keytool && \
-    unlink /usr/bin/orbd && \
+    # unlink /usr/bin/orbd && \ >> No such file or directory
     unlink /usr/bin/pack200 && \
-    unlink /usr/bin/policytool && \
+    # unlink /usr/bin/policytool && \ >> No such file or directory
     unlink /usr/bin/rmid && \
     unlink /usr/bin/rmiregistry && \
-    unlink /usr/bin/servertool && \
-    unlink /usr/bin/tnameserv && \
+    # unlink /usr/bin/servertool && \
+    # unlink /usr/bin/tnameserv && \
     unlink /usr/bin/unpack200 && \
-    unlink /usr/lib/jvm-exports/jre && \
+    # unlink /usr/lib/jvm-exports/jre && \
     unlink /usr/share/man/man1/java.1.gz && \
     unlink /usr/share/man/man1/jjs.1.gz && \
     unlink /usr/share/man/man1/keytool.1.gz && \
-    unlink /usr/share/man/man1/orbd.1.gz && \
+    # unlink /usr/share/man/man1/orbd.1.gz && \
     unlink /usr/share/man/man1/pack200.1.gz && \
-    unlink /usr/share/man/man1/policytool.1.gz && \
+    # unlink /usr/share/man/man1/policytool.1.gz && \
     unlink /usr/share/man/man1/rmid.1.gz && \
     unlink /usr/share/man/man1/rmiregistry.1.gz && \
-    unlink /usr/share/man/man1/servertool.1.gz && \
-    unlink /usr/share/man/man1/tnameserv.1.gz && \
+    # unlink /usr/share/man/man1/servertool.1.gz && \
+    # unlink /usr/share/man/man1/tnameserv.1.gz && \
     unlink /usr/share/man/man1/unpack200.1.gz
 
 # Copy the entrypoint

@@ -1,4 +1,4 @@
-FROM openshift/jenkins-slave-base-centos7
+FROM jenkins-slave-base:jdk11
 
 MAINTAINER Gabe Montero <gmontero@redhat.com>
 
@@ -10,15 +10,15 @@ ENV MAVEN_VERSION=3.5 \
     PATH=$PATH:/opt/gradle/bin
 
 # Install Maven
-RUN INSTALL_PKGS="java-1.8.0-openjdk-devel.x86_64 rh-maven35*" && \
-    x86_EXTRA_RPMS=$(if [ "$(uname -m)" == "x86_64" ]; then echo -n java-1.8.0-openjdk-devel.i686 ; fi) && \
+RUN INSTALL_PKGS="java-11-openjdk-devel.x86_64 rh-maven35*" && \
+    x86_EXTRA_RPMS=$(if [ "$(uname -m)" == "x86_64" ]; then echo -n java-11-openjdk-devel.i686 ; fi) && \
     yum install -y centos-release-scl-rh && \
     yum install -y --enablerepo=centosplus $INSTALL_PKGS $x86_EXTRA_RPMS && \
     curl -LOk https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip && \
     unzip gradle-${GRADLE_VERSION}-bin.zip -d /opt && \
     rm -f gradle-${GRADLE_VERSION}-bin.zip && \
     ln -s /opt/gradle-${GRADLE_VERSION} /opt/gradle && \
-    rpm -V java-1.8.0-openjdk-devel.x86_64 rh-maven35 $x86_EXTRA_RPMS && \
+    rpm -V java-11-openjdk-devel.x86_64 rh-maven35 $x86_EXTRA_RPMS && \
     yum clean all -y && \
     mkdir -p $HOME/.m2 && \
     mkdir -p $HOME/.gradle
@@ -30,6 +30,9 @@ ADD contrib/bin/scl_enable /usr/local/bin/scl_enable
 ADD contrib/bin/configure-agent /usr/local/bin/configure-agent
 ADD ./contrib/settings.xml $HOME/.m2/
 ADD ./contrib/init.gradle $HOME/.gradle/
+
+RUN alternatives --set java /usr/lib/jvm/java-11-openjdk-11.0.1.13-3.el7_6.x86_64/bin/java && exit
+RUN alternatives --set javac /usr/lib/jvm/java-11-openjdk-11.0.1.13-3.el7_6.x86_64/bin/javac && exit
 
 RUN chown -R 1001:0 $HOME && \
     chmod -R g+rw $HOME
